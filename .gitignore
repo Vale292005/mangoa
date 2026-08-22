@@ -1,0 +1,50 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Variables de entorno
+.env
+.vscode/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# --- Spring Boot ---
+src/main/resources/application-local.properties
+
+# --- Sistema Operativo ---
+# Archivos basura que crea macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Archivos basura que crea Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini

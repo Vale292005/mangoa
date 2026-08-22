@@ -38,7 +38,7 @@ build/
 
 # --- Spring Boot ---
 src/main/resources/application-local.properties
-
+src/test/java/resources/application-test.properties
 # --- Sistema Operativo ---
 # Archivos basura que crea macOS
 .DS_Store

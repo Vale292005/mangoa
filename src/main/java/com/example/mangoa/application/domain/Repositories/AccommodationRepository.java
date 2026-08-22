@@ -17,13 +17,13 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, UU
     //Busuqeda de alojamientos activos, por ubicacion , capacidad y precio max
     @Query("""
         SELECT a FROM Accommodation a
-        WHERE a.active = true"
-            AND LOWER(a.location)LIKE LOWER(CONCAT('%',:location, "%"))
+        WHERE a.active = true
+            AND LOWER(a.location)LIKE LOWER(CONCAT('%',:location, '%'))
             AND a.capacity >= :capacity
             AND a.price <= :maxPrice
             
     """)
-    Page<Accommodation> findAvaibleAccomodations(
+    Page<Accommodation> findAvailableAccomodations(
         @Param("location")String location,
         @Param("capacity")Integer capacity,
         @Param("maxPrice")BigDecimal maxPrice,

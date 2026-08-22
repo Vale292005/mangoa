@@ -22,7 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking,UUID> {
     
     @Query("""
             SELECT COUNT(b) > 0
-            FROM booking b
+            FROM Booking b
             WHERE b.accommodation.id = :accommodationId
             AND b.status IN (PENDING, CONFIRMED)
             AND :checkInDate < b.checkOutDate

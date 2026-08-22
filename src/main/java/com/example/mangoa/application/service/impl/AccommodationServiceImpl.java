@@ -57,7 +57,7 @@ public class AccommodationServiceImpl implements AccomodationService{
                 Integer searchCapacity = (capacity == null) ? 1 : capacity;
                 BigDecimal searchMaxPrice = (maxPrice == null) ? new BigDecimal("999999.99") : maxPrice;
 
-                return accommodationRepository.findAvaibleAccomodations(
+                return accommodationRepository.findAvailableAccomodations(
                     searchLocation, searchCapacity, searchMaxPrice, pageable)
                     .map(AccommodationResponse::fromEntity);
              }

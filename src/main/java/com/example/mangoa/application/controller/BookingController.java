@@ -57,7 +57,7 @@ public class BookingController {
     }
 
     //PATCH /api/v1/bookings/{id}/confirm -> Confirmar reserva
-    @PatchMapping("{id/confirm")
+    @PatchMapping("/{id}/confirm")
     public ResponseEntity<BookingResponse> confirmBooking(@PathVariable UUID id){
         BookingResponse response = bookingService.confirmBooking(id);
         return ResponseEntity.ok(response);

@@ -43,7 +43,7 @@ public class AccommodationController {
     }
 
     // GET /api/v1/accommodations/{id} -> Consultar por id
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity<AccommodationResponse> getAccommodationById(@PathVariable UUID id){
         AccommodationResponse response = accomodationService.getAccomodationById(id);
         return ResponseEntity.ok(response);

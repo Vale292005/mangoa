@@ -1,4 +1,4 @@
-package com.example.mangoa.security;
+package com.example.mangoa.application.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-none}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-none}
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init-sql:/docker-entrypoint-initdb.d:ro
+      - db-backups:/backups
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-backup:
+    image: postgres:15
+    depends_on:
+      - db
+    volumes:
+      - db-backups:/backups
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    entrypoint: ["/bin/bash","-lc","PGPASSWORD=\"${POSTGRES_PASSWORD}\" pg_dump -h db -U ${POSTGRES_USER} ${POSTGRES_DB} > /backups/backup-$(date +%Y%m%d%H%M%S).sql"]
+
+volumes:
+  db-data:
+  db-backups: {}

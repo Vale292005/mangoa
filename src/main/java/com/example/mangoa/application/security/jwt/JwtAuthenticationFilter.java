@@ -16,6 +16,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.Cookie;
 
 @Component
 @RequiredArgsConstructor
@@ -31,16 +32,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         
-        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        jwt = resolveToken(request);
+
+        if(jwt == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
 
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -57,6 +58,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies!=null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("access_token")){
+                    return cookie.getValue();
+                }
+            }
+        }
+        String authHeader = request.getHeader("Authorization");
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            return authHeader.substring(7);
+        }
+        return null;
     }
 
 }

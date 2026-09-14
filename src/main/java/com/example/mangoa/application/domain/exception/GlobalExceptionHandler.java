@@ -3,8 +3,12 @@ package com.example.mangoa.application.domain.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
     // 1. Recurso no encontrado(404 NOT FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -30,6 +36,32 @@ public class GlobalExceptionHandler {
             );
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     };
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(
+        BadCredentialsException ex, HttpServletRequest request
+    ){
+        ErrorResponse response = ErrorResponse.of(
+            HttpStatus.UNAUTHORIZED.value(),
+            HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+            "Email o contraseña incorrectos.",
+            request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(
+        AuthenticationException ex, HttpServletRequest request
+    ){
+        ErrorResponse response = ErrorResponse.of(
+            HttpStatus.UNAUTHORIZED.value(),
+            HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+            "No autorizado.",
+            request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
 
     // 2. Errores de reglas de negocio (409 CONFLICT)
     @ExceptionHandler(IllegalStateException.class)
@@ -83,6 +115,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGeneralException(
         Exception ex, HttpServletRequest request
     ){
+        log.error("Excepción no controlada en {}", request.getRequestURI(), ex);
         ErrorResponse response = ErrorResponse.of(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),

@@ -32,7 +32,9 @@ public class AccommodationServiceImpl implements AccomodationService{
             request.description(),
             request.location(),
             request.price(),
-            request.capacity()
+            request.capacity(),
+            request.rutasImagenes(),
+            request.caracteristicas()
         );
 
         Accommodation savedAccommodation = accommodationRepository.save(accommodation);
@@ -69,5 +71,4 @@ public class AccommodationServiceImpl implements AccomodationService{
                 .orElseThrow(() -> new ResourceNotFoundException("Alojamiento no encontrado con el ID: " + id));
         accmmodation.deactivate();
      }
-    
 }

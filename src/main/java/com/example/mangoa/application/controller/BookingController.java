@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -68,6 +70,14 @@ public class BookingController {
     public ResponseEntity<Void> cancelBooking(@PathVariable UUID id){
         bookingService.cancelBooking(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //GET /api/v1/bookings -> listar todos los bookings
+    @GetMapping()
+    public ResponseEntity<Page<BookingResponse>> getBookings(
+        @PageableDefault(size = 10, sort = "createdAt") Pageable pageable) {
+        Page<BookingResponse> response = bookingService.getBookings(pageable);
+        return ResponseEntity.ok(response);
     }
 
 }

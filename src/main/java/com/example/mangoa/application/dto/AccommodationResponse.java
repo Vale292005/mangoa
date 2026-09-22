@@ -1,6 +1,7 @@
 package com.example.mangoa.application.dto;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import com.example.mangoa.application.domain.model.Accommodation;

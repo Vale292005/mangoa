@@ -43,7 +43,7 @@ public class SecurityConfig {
             }))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**", "/oauth/**", "/login/**", "/api/v1/bookings/**").permitAll()
+                .requestMatchers("/api/v1/auth/**", "/oauth/**", "/login/**", "/api/v1/bookings/**","/api/v1/accommodations/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger/**").permitAll()
                 
                 // Endpoint con roles especificos

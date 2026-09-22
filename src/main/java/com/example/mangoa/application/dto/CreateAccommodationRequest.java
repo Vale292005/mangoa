@@ -1,6 +1,10 @@
 package com.example.mangoa.application.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+
+import com.example.mangoa.application.domain.model.Amenity;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +28,13 @@ public record CreateAccommodationRequest(
 
     @NotNull(message = "La capacidad del alojamiento es obligatoria")
     @DecimalMin(value = "1", message = "La capacidad del alojamiento debe ser al menos 1")
-    Integer capacity
+    Integer capacity,
+
+    @NotNull(message = "El hospedaje debe tener 1 imagen como mínimo")
+    @Size(min = 1, max = 5, message = "El hospedaje debe tener entre 1 y 5 fotos")
+    List<@NotNull(message = "la ruta no debe estar vacía") String> rutasImagenes ,
+
+    Set<Amenity> caracteristicas
 ) {
     
 }

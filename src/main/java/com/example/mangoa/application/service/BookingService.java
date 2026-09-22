@@ -19,4 +19,6 @@ public interface BookingService {
     BookingResponse confirmBooking(UUID bookingId);
 
     void cancelBooking(UUID bookingId);
+
+    Page<BookingResponse> getBookings(Pageable pageable);
 }

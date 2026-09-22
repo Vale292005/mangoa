@@ -90,4 +90,21 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con el ID: " + bookingId));
         booking.cancel();
      }
+
+    @Override 
+    public Page<BookingResponse> getBookings(Pageable pageable){
+        return bookingRepository.findAll(pageable).map(booking -> new BookingResponse(
+            booking.getId(),
+            booking.getUser() != null ? booking.getUser().getId() : null,
+            booking.getUser() != null
+                ? booking.getUser().getFirstName() + "" + booking.getUser().getLastName() : null,
+                        booking.getAccommodation() != null ? booking.getAccommodation().getId() : null,
+            booking.getAccommodation() != null ? booking.getAccommodation().getName() : null,
+            booking.getCheckInDate(),
+            booking.getCheckOutDate(),
+            booking.getTotalPrice(),
+            booking.getStatus(),
+            booking.getCreatedAt()
+        ));
+    }
 }
